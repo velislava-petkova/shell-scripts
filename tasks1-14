@@ -1,0 +1,63 @@
+Зад. 1
+echo Броят на търсените редове е$(egrep "[02468]" philip.txt | egrep -v "[a-w]" | wc -l)
+
+Зад. 2
+find / -user $(whoami) 2>/dev/null | wc – l 
+
+Зад. 3
+а) find . –empty –type f | xargs rm
+б) find ~ -type f -printf "%s %f\n" | sort -n -k1,1 -t" " -r | head -n 5 | cut -d' ' -f2
+
+Зад. 4
+awk -F':' '$4=="512" {print $0}' /etc/passwd | tr , : | cut -d':' -f1,5 | grep 'а$' | cut -c 3,4 | sort | uniq -c | sort -n -r | head -n 1
+
+Зад. 5
+find ~ -type f -printf "%n %f\n" | sort -n -t' ' -k1,1 -r | head -n 5 | cut -d' ' -f2
+
+Зад. 6
+find ~ -mindepth 1 -type d -print0 | xargs -0 chmod 755
+или
+find ~ -mindepth 1 -type d -exec chmod 755 {} \;
+
+Зад. 7
+
+linkcount>1 
+%T@ -> показва времето в unix time като число
+
+find ~pesho –type f – printf “%n %T@ %i \n” | awk ‘$1 > 1’ {print $2 $3} | sort –nr | head –n 1 | cut –d’ ’ –f 2
+
+
+Зад. 8
+
+egrep "^([^:]+{3})$(sort -t':' -k 3,3 /etc/passwd | head -n 201 | tail -n 1 | cut -d':' -f4):" /etc/passwd | cut -c 2- | sort -n -t':' | tr ',' ':' | awk - F':' '{printf $5":"$NF"\n"}'
+
+
+Зад 9.
+egrep “^([^;]+;)+$(tail –n +2 planets.txt | sort –n –t’;’ – k3,3 | tail –n 1 | cut –d’;’ –f2) ;“ planets.txt | sort –t’;’ –n –k3,3 | head –n 1 | awk –F ‘,’  ‘{print $1”\t”$4}’
+
+Зад. 10
+
+find / -type d -path "/home/SI/*" 2>/dev/null -printf "%f %C@\n"|awk '$2>1551168000 && $2<15511761000 {print $1}' | xargs -i sh -c "(cat /etc/passwd | grep "^{}:")" | tr ',' ':' | cut -d':' -f1,5 | cut -c2- | tr ':' "\t"
+Зад. 11
+а) find /home/velin -inum $(find /home/velin -type f -printf "%T@ %i %n" | sort -n -t' ' -k1,1 |tail -n 1 | cut -d' ' -f2 ) | awk -F'/' '{print NF-1}'
+
+б) find /home/velin -inum $(find /home/velin -type f -printf "%T@ %i %n" | sort -n -t' ' -k1,1 |tail -n 1 | cut -d' ' -f2 ) | | awk -F'/' '{print $0" "NF-1}' | sort -t' ' -n -k2,2 | head -n 1
+
+Зад. 12
+
+666-022 = 644
+
+find ~ -maxdepth 1 -type f -perm 644 //само в самаат директория
+или 
+find ~ -type f -perm 644 //вкл поддиректории
+
+Зад. 13
+
+cat spacex | egrep "[^|]+|$(egrep "([^|]+|){2}Failure|" spacex | cut -d '|' -f2 | sort | uniq -c | tr -s ' ' | sort -t' ' -k2,2 -n | tail -n 1 | cut -d' ' -f3)|" | sort -t"|" -k1,1 -n | tail -n 1 | awk -F'|' '{print $3":"$4}'
+
+Зад. 14
+
+666-002 = 442
+
+find ~ -maxdepth 1 -type f -user $(whoami) | xargs chmod 442 1>/dev/null 2>/dev //
+
